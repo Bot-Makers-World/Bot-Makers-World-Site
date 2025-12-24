@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Makers World | Soluções Premium & Parceiros</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0b',
+                        darker: '#050505',
+                        blurple: '#5865F2', 
+                        blurpleHover: '#4752c4',
+                        neonBlue: '#00d2ff',
+                        neonPurple: '#9d50bb'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        title: ['Sora', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(88, 101, 242, 0.3)',
+                        'glow': '0 0 40px rgba(0, 210, 255, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505 !important;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background */
+        .bg-ambient {
+            background-color: #050505;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(88, 101, 242, 0.12), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 210, 255, 0.12), transparent 25%);
+            background-attachment: fixed;
+        }
+
+        /* Grid Pattern Overlay */
+        .bg-grid {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* SPOTLIGHT CARD EFFECT */
+        .spotlight-card {
+            background-color: rgba(20, 20, 23, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(12px);
+        }
+
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+
+        .spotlight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px -10px rgba(88, 101, 242, 0.2);
+            border-color: rgba(88, 101, 242, 0.5);
+        }
+
+        /* Texto Gradiente */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 40%, #5865F2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Ícones com brilho de fundo */
+        .icon-glow {
+            width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 1rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .spotlight-card:hover .icon-glow {
+            background: rgba(88, 101, 242, 0.1);
+            border-color: rgba(88, 101, 242, 0.3);
+            color: #5865F2;
+        }
+
+        /* Swiper Improvements */
+        .swiper-container-3d {
+            padding: 40px 10px 60px 10px;
+        }
+        
+        .swiper-slide {
+            transition: all 0.4s ease;
+            height: auto;
+            display: flex;
+        }
+
+        /* Botões de Navegação Customizados */
+        .nav-btn {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            background: #5865F2;
+            border-color: #5865F2;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="bg-ambient antialiased">
+
+    <div class="bg-grid"></div>
+
+    <!-- HEADER -->
+    <header class="fixed w-full top-0 z-50 backdrop-blur-xl border-b border-white/5 bg-black/80">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-title font-bold flex items-center gap-2 group">
+                <div class="w-8 h-8 bg-blurple rounded-lg flex items-center justify-center text-white shadow-neon transition group-hover:scale-110">
+                    <i class="fa-solid fa-robot text-sm"></i>
+                </div>
+                <span>Bot Makers <span class="text-blurple">World</span></span>
+            </a>
+
+            <nav class="hidden md:flex gap-8 items-center text-sm font-medium text-gray-400">
+                <a href="#hero" class="hover:text-white transition">Início</a>
+                <a href="#servicos" class="hover:text-white transition">Catálogo</a>
+                <a href="#hospedagem" class="hover:text-white transition">Hospedagem</a>
+                <a href="#parceiros" class="hover:text-white transition">Parceiros</a>
+            </nav>
+
+            <a href="https://discord.gg/Mgdeg9Anbs" target="_blank" class="hidden md:inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2 rounded-full text-sm font-bold transition text-white hover:border-blurple/50 hover:shadow-neon">
+                <i class="fa-brands fa-discord"></i> Comunidade
+            </a>
+            
+            <button class="md:hidden text-white text-xl"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+        <!-- Decoration Elements -->
+        <div class="absolute top-1/4 left-10 w-32 h-32 bg-blurple/20 rounded-full blur-[80px]"></div>
+        <div class="absolute bottom-1/4 right-10 w-40 h-40 bg-neonBlue/10 rounded-full blur-[80px]"></div>
+
+        <div class="container mx-auto px-6 text-center reveal z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-blurple/30 bg-blurple/5 text-blurple text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-sm">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                Sistemas Verificados & Otimizados
+            </div>
+            
+            <h1 class="font-title text-5xl md:text-8xl font-extrabold mb-8 leading-tight tracking-tight text-white">
+                A Revolução do <br>
+                <span class="text-gradient">Seu Servidor</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+                Transformamos comunidades comuns em ecossistemas digitais de elite. Bots personalizados, hospedagem blindada e suporte que entende você.
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-5 justify-center items-center">
+                <a href="#servicos" class="group relative bg-blurple text-white px-10 py-4 rounded-xl font-bold transition overflow-hidden shadow-neon">
+                    <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                    <span class="relative flex items-center gap-2">Explorar Catálogo <i class="fa-solid fa-arrow-down"></i></span>
+                </a>
+                <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="px-10 py-4 rounded-xl font-bold border border-white/10 hover:bg-white/5 hover:border-white/30 transition text-white">
+                    Orçamento Personalizado
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARROSSEL DE BOTS (3D EFFECT) -->
+    <section id="servicos" class="py-24 border-t border-white/5 relative">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex justify-between items-end mb-12 reveal">
+                <div>
+                    <h2 class="font-title text-3xl md:text-5xl font-bold mb-4 text-white">Bots Exclusivos</h2>
+                    <p class="text-gray-400 max-w-lg">Pagamento único. Código fonte incluso. Escolha a base perfeita para sua comunidade.</p>
+                </div>
+                <!-- Navigation Buttons -->
+                <div class="hidden md:flex gap-3">
+                    <div class="nav-btn bot-prev"><i class="fa-solid fa-chevron-left"></i></div>
+                    <div class="nav-btn bot-next"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+            </div>
+
+            <div class="swiper bot-swiper swiper-container-3d reveal">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1 -->
+                    <div class="swiper-slide w-full md:w-[380px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <div class="icon-glow text-blue-400"><i class="fa-solid fa-box-open"></i></div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Básico</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">A entrada perfeita. Comandos essenciais, boas-vindas e autorole configurável.</p>
+                            <div class="mt-auto pt-6 border-t border-white/5">
+                                <div class="text-3xl font-bold text-white mb-4 font-title">R$ 150</div>
+                                <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="block w-full py-3.5 rounded-lg border border-white/10 bg-white/5 text-center hover:bg-blurple hover:border-blurple transition font-bold text-sm uppercase tracking-wide text-white">Contratar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="swiper-slide w-full md:w-[380px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <div class="icon-glow text-yellow-400"><i class="fa-solid fa-gavel"></i></div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Moderação</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Controle total. Logs avançadas, punições automáticas e filtros de chat.</p>
+                            <div class="mt-auto pt-6 border-t border-white/5">
+                                <div class="text-3xl font-bold text-white mb-4 font-title">R$ 300</div>
+                                <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="block w-full py-3.5 rounded-lg border border-white/10 bg-white/5 text-center hover:bg-blurple hover:border-blurple transition font-bold text-sm uppercase tracking-wide text-white">Contratar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="swiper-slide w-full md:w-[380px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <div class="icon-glow text-green-400"><i class="fa-solid fa-ticket"></i></div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Tickets</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Profissionalize seu suporte. Painel web, transcripts HTML e categorias.</p>
+                            <div class="mt-auto pt-6 border-t border-white/5">
+                                <div class="text-3xl font-bold text-white mb-4 font-title">R$ 300</div>
+                                <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="block w-full py-3.5 rounded-lg border border-white/10 bg-white/5 text-center hover:bg-blurple hover:border-blurple transition font-bold text-sm uppercase tracking-wide text-white">Contratar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="swiper-slide w-full md:w-[380px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <div class="icon-glow text-purple-400"><i class="fa-solid fa-flask"></i></div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Economia & XP</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Engajamento puro. Loja virtual, rank cards, inventário e banco de dados.</p>
+                            <div class="mt-auto pt-6 border-t border-white/5">
+                                <div class="text-3xl font-bold text-white mb-4 font-title">R$ 500</div>
+                                <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="block w-full py-3.5 rounded-lg border border-white/10 bg-white/5 text-center hover:bg-blurple hover:border-blurple transition font-bold text-sm uppercase tracking-wide text-white">Contratar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 5 -->
+                    <div class="swiper-slide w-full md:w-[380px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <div class="icon-glow text-red-500"><i class="fa-solid fa-shield-halved"></i></div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Segurança</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Proteção militar. Anti-Raid, Anti-Nuke, Backup e Captcha na entrada.</p>
+                            <div class="mt-auto pt-6 border-t border-white/5">
+                                <div class="text-3xl font-bold text-white mb-4 font-title">R$ 700</div>
+                                <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="block w-full py-3.5 rounded-lg border border-white/10 bg-white/5 text-center hover:bg-blurple hover:border-blurple transition font-bold text-sm uppercase tracking-wide text-white">Contratar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 6 (All in One) -->
+                    <div class="swiper-slide w-full md:w-[380px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full border-blurple/50 shadow-neon" style="background: rgba(88, 101, 242, 0.05);" onmousemove="handleMouseMove(event)">
+                            <div class="absolute top-0 right-0 bg-blurple text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-bl-xl">Best Seller</div>
+                            <div class="icon-glow text-white border-blurple/50 bg-blurple/20"><i class="fa-solid fa-crown"></i></div>
+                            <h3 class="text-2xl font-bold text-white mb-2">All-in-One</h3>
+                            <p class="text-gray-300 text-sm leading-relaxed mb-6">A solução definitiva. Todos os sistemas anteriores integrados + Dashboard Web.</p>
+                            <div class="mt-auto pt-6 border-t border-white/10">
+                                <div class="text-3xl font-bold text-white mb-4 font-title">R$ 1.200</div>
+                                <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="block w-full py-3.5 rounded-lg bg-blurple hover:bg-blurpleHover text-white text-center transition font-bold text-sm uppercase tracking-wide shadow-lg shadow-blurple/20">Contratar Elite</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination mt-8"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARROSSEL DE HOSPEDAGEM (INFINITO/AUTOMÁTICO) -->
+    <section id="hospedagem" class="py-24 bg-darker relative">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex justify-between items-end mb-12 reveal">
+                <div>
+                    <h2 class="font-title text-3xl md:text-5xl font-bold mb-4 text-white">Hospedagem VIP</h2>
+                    <p class="text-gray-400 max-w-lg">Uptime de 99.9%. Manutenções preventivas quinzenais. Dorma tranquilo enquanto nós cuidamos do resto.</p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="nav-btn host-prev"><i class="fa-solid fa-chevron-left"></i></div>
+                    <div class="nav-btn host-next"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+            </div>
+
+            <div class="swiper host-swiper swiper-container-3d reveal">
+                <div class="swiper-wrapper">
+                    <!-- ================= SET 1 (ORIGINAL) ================= -->
+                    <!-- Host 1 -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-gray-400">Plano Básico</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 39</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 25</div>
+                            </div>
+                            <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gray-500"></i> Hospedagem 24/7</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gray-500"></i> Suporte Básico</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gray-500"></i> 1 Manutenção/mês</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg border border-white/10 text-center block hover:bg-white/5 transition font-semibold text-white">Assinar</a>
+                        </div>
+                    </div>
+                    <!-- Host 2 -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-blue-400">Plano Médio</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 75</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 45</div>
+                            </div>
+                            <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-400"></i> Ideal p/ Moderação</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-400"></i> Suporte Prioritário</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-400"></i> Manutenção Quinzenal</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg border border-white/10 text-center block hover:bg-white/5 hover:border-blue-400 transition font-semibold text-white">Assinar</a>
+                        </div>
+                    </div>
+                    <!-- Host 3 -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-purple-400">Plano Avançado</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 125</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 75</div>
+                            </div>
+                            <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-400"></i> Para Economia/DB</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-400"></i> Suporte Avançado</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-400"></i> Manutenção Quinzenal</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg border border-white/10 text-center block hover:bg-white/5 hover:border-purple-400 transition font-semibold text-white">Assinar</a>
+                        </div>
+                    </div>
+                    <!-- Host 4 -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full border-neonBlue/40 shadow-glow" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-neonBlue">🌟 Plano Premium</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 200</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 120</div>
+                            </div>
+                            <ul class="text-sm text-gray-300 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-star text-neonBlue"></i> Recursos Ilimitados</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-star text-neonBlue"></i> Suporte VIP Instantâneo</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-star text-neonBlue"></i> Monitoramento Real-time</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg bg-neonBlue/10 text-neonBlue border border-neonBlue/50 text-center block hover:bg-neonBlue hover:text-dark transition font-bold">Assinar VIP</a>
+                        </div>
+                    </div>
+
+                    <!-- ================= SET 2 (DUPLICADO PARA LOOP PERFEITO) ================= -->
+                    <!-- Host 1 Clone -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-gray-400">Plano Básico</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 39</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 25</div>
+                            </div>
+                            <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gray-500"></i> Hospedagem 24/7</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gray-500"></i> Suporte Básico</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gray-500"></i> 1 Manutenção/mês</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg border border-white/10 text-center block hover:bg-white/5 transition font-semibold text-white">Assinar</a>
+                        </div>
+                    </div>
+                    <!-- Host 2 Clone -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-blue-400">Plano Médio</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 75</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 45</div>
+                            </div>
+                            <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-400"></i> Ideal p/ Moderação</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-400"></i> Suporte Prioritário</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-400"></i> Manutenção Quinzenal</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg border border-white/10 text-center block hover:bg-white/5 hover:border-blue-400 transition font-semibold text-white">Assinar</a>
+                        </div>
+                    </div>
+                    <!-- Host 3 Clone -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-purple-400">Plano Avançado</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 125</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 75</div>
+                            </div>
+                            <ul class="text-sm text-gray-400 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-400"></i> Para Economia/DB</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-400"></i> Suporte Avançado</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-400"></i> Manutenção Quinzenal</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg border border-white/10 text-center block hover:bg-white/5 hover:border-purple-400 transition font-semibold text-white">Assinar</a>
+                        </div>
+                    </div>
+                    <!-- Host 4 Clone -->
+                    <div class="swiper-slide w-full md:w-[320px]">
+                        <div class="spotlight-card p-8 w-full flex flex-col h-full border-neonBlue/40 shadow-glow" onmousemove="handleMouseMove(event)">
+                            <h3 class="text-lg font-bold text-neonBlue">🌟 Plano Premium</h3>
+                            <div class="my-6">
+                                <span class="text-4xl font-bold text-white font-title">R$ 200</span><span class="text-gray-500">/mês</span>
+                                <div class="text-xs text-blurple font-bold mt-2 bg-blurple/10 inline-block px-2 py-1 rounded">Quinzenal: R$ 120</div>
+                            </div>
+                            <ul class="text-sm text-gray-300 space-y-3 mb-8 flex-grow">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-star text-neonBlue"></i> Recursos Ilimitados</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-star text-neonBlue"></i> Suporte VIP Instantâneo</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-star text-neonBlue"></i> Monitoramento Real-time</li>
+                            </ul>
+                            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="w-full py-3 rounded-lg bg-neonBlue/10 text-neonBlue border border-neonBlue/50 text-center block hover:bg-neonBlue hover:text-dark transition font-bold">Assinar VIP</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination mt-8"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARCEIROS OFICIAIS -->
+    <section id="parceiros" class="py-24 border-t border-white/5 bg-gradient-to-b from-dark to-darker">
+        <div class="container mx-auto px-6 text-center reveal">
+            <span class="text-blurple font-bold tracking-[0.2em] text-xs uppercase mb-3 block">Network de Qualidade</span>
+            <h2 class="font-title text-3xl md:text-4xl font-bold mb-16 text-white">Parceiros Oficiais</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+                <!-- Parceiro 1 -->
+                <div class="spotlight-card p-8 flex items-center gap-6 cursor-pointer group hover:bg-white/5" onmousemove="handleMouseMove(event)" onclick="window.open('https://discord.gg/animescafe', '_blank')">
+                    <div class="w-20 h-20 shrink-0 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg group-hover:scale-110 transition duration-500">
+                        <i class="fa-solid fa-mug-hot"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2 mb-2">
+                            Animes Café 
+                            <i class="fa-solid fa-circle-check text-blurple text-sm" title="Verificado"></i>
+                        </h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">A maior comunidade de animes, jogos e interação. Junte-se para conversar e fazer amigos.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-600 group-hover:text-neonBlue ml-auto text-xl transition"></i>
+                </div>
+
+                <!-- Parceiro 2 -->
+                <div class="spotlight-card p-8 flex items-center gap-6 cursor-pointer group hover:bg-white/5" onmousemove="handleMouseMove(event)" onclick="window.open('https://discord.gg/saagimtwo', '_blank')">
+                    <div class="w-20 h-20 shrink-0 bg-gradient-to-br from-[#ff0033] to-[#1a1a1a] border border-[#ff0033]/30 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg group-hover:scale-110 transition duration-500">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2 mb-2">
+                            SaagimTwo 
+                            <i class="fa-solid fa-circle-check text-blurple text-sm" title="Verificado"></i>
+                        </h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Um espaço para ficar. Clãs, Roleplay, Sorteios e Eventos diários com uma comunidade ativa.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-gray-600 group-hover:text-neonBlue ml-auto text-xl transition"></i>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+   <!-- COMO SOLICITAR -->
+    <section id="contato" class="py-24 relative overflow-hidden">
+        <!-- Centraliza tudo explicitamente -->
+        <div class="container mx-auto px-6 text-center reveal flex flex-col items-center">
+            <h2 class="font-title text-3xl md:text-5xl font-bold mb-16 text-white">Inicie seu Projeto</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl w-full relative z-10 mb-16">
+                <div class="p-8 rounded-2xl border border-white/5 bg-white/[0.02]">
+                    <div class="text-4xl font-title font-black text-blurple/20 mb-4">01</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Entre no Discord</h3>
+                    <p class="text-gray-500 text-sm">Acesse nosso hub central para ver as novidades e canais.</p>
+                </div>
+                <div class="p-8 rounded-2xl border border-neonBlue/20 bg-neonBlue/[0.02]">
+                    <div class="text-4xl font-title font-black text-neonBlue/20 mb-4">02</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Abra um Ticket</h3>
+                    <p class="text-gray-500 text-sm">Vá em <span class="text-neonBlue">#suporte</span> e descreva sua ideia.</p>
+                </div>
+                <div class="p-8 rounded-2xl border border-white/5 bg-white/[0.02]">
+                    <div class="text-4xl font-title font-black text-white/20 mb-4">03</div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Desenvolvimento</h3>
+                    <p class="text-gray-500 text-sm">Aprovado o orçamento, nossa equipe elite começa a codar.</p>
+                </div>
+            </div>
+
+            <a href="https://ptb.discord.com/channels/1449122770968510516/1449143568580083824" target="_blank" class="inline-flex items-center gap-3 bg-gradient-to-r from-blurple to-neonBlue text-white px-12 py-5 rounded-full font-bold text-lg hover:shadow-neon transition transform hover:-translate-y-1">
+                Iniciar Pedido Agora <i class="fa-solid fa-rocket"></i>
+            </a>
+            <p class="mt-4 text-xs text-gray-600 uppercase tracking-widest">Suporte técnico prioritário para assinantes ativos.</p>
+        </div>
+    </section>
+
+   <!-- FOOTER -->
+    <footer class="py-12 border-t border-white/5 bg-black/60 backdrop-blur-md relative z-50">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                
+                <!-- Lado Esquerdo: Logo -->
+                <div class="flex items-center justify-center md:justify-start gap-3 font-bold text-gray-300">
+                    <div class="w-8 h-8 bg-blurple rounded flex items-center justify-center text-white text-xs shadow-neon">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    Bot Makers World
+                </div>
+
+                <!-- Centro: Copyright -->
+                <div class="text-center">
+                    <p class="text-gray-600 text-sm">© 2025 Todos os direitos reservados.</p>
+                </div>
+
+                <!-- Lado Direito: Redes -->
+                <div class="flex justify-center md:justify-end gap-6 text-xl">
+                    <a href="https://discord.gg/Mgdeg9Anbs" target="_blank" class="text-gray-500 hover:text-blurple transition transform hover:scale-110 hover:-translate-y-1">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                    <a href="https://github.com/Bot-Makers-World" target="_blank" class="text-gray-500 hover:text-white transition transform hover:scale-110 hover:-translate-y-1">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // Spotlight Effect Logic
+        function handleMouseMove(e) {
+            const el = e.currentTarget;
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            el.style.setProperty("--mouse-x", `${x}px`);
+            el.style.setProperty("--mouse-y", `${y}px`);
+        }
+
+        // Configuração Comum
+        const commonConfig = {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            loop: true, // Isso ativa o loop infinito
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 0,
+                depth: 100,
+                modifier: 2.5,
+                slideShadows: false, // Sem sombras feias no tema dark
+            },
+        };
+
+        // Init Bots (Carrossel 1)
+        new Swiper('.bot-swiper', {
+            ...commonConfig,
+            navigation: {
+                nextEl: '.bot-next',
+                prevEl: '.bot-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            }
+        });
+
+        // Init Hosts (Carrossel 2 - Infinito e Automático)
+        new Swiper('.host-swiper', {
+            ...commonConfig,
+            speed: 1000, 
+            autoplay: {
+                delay: 2000, 
+                disableOnInteraction: false, // Continua rodando mesmo se o usuário clicar
+                pauseOnMouseEnter: true
+            },
+            navigation: {
+                nextEl: '.host-next',
+                prevEl: '.host-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            }
+        });
+
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
